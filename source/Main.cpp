@@ -213,18 +213,22 @@ static void mainLoop() {
     controller1.setButtonState(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
     controller1.setButtonState(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);
 
-    if (keys[SDL_SCANCODE_R]) {
-      // Reset
-      engine.reset();
-    }
+    // ! remove reset option as IJON
+    // if (keys[SDL_SCANCODE_R]) {
+    //   // Reset
+    //   engine.reset();
+    // }
+
     if (keys[SDL_SCANCODE_ESCAPE]) {
       // quit
       running = false;
       break;
     }
-    if (keys[SDL_SCANCODE_F]) {
-      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    }
+
+    // ! remove full screen option as IJON
+    // if (keys[SDL_SCANCODE_F]) {
+    //   SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    // }
 
     engine.update();
     engine.render(renderBuffer);
