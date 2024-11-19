@@ -23,7 +23,10 @@
 /**
  * Call a subroutine stored in a goto label.
  */
-#define JSR(subroutine, index) pushReturnIndex(index); goto subroutine; Return_ ## index:
+#define JSR(subroutine, index)                                                 \
+  pushReturnIndex(index);                                                      \
+  goto subroutine;                                                             \
+  Return_##index:
 
 /**
  * High/upper byte of a 16-bit integer.
