@@ -15,7 +15,7 @@ std::list<ConfigurationOption *> Configuration::configurationOptions = {
  * Whether audio is enabled or not.
  */
 BasicConfigurationOption<bool> Configuration::audioEnabled("audio.enabled",
-                                                           true);
+                                                           false);
 
 /**
  * Audio frequency, in Hz
@@ -55,7 +55,8 @@ BasicConfigurationOption<bool>
 /**
  * Whether vsync is enabled for video.
  */
-BasicConfigurationOption<bool> Configuration::vsyncEnabled("video.vsync", true);
+BasicConfigurationOption<bool> Configuration::vsyncEnabled("video.vsync",
+                                                           false);
 
 ConfigurationOption::ConfigurationOption(const std::string &path)
     : path(path) {}
