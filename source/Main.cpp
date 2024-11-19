@@ -267,6 +267,21 @@ static void mainLoop() {
       frame = 0;
       progStartTime = now;
     }
+
+    // IJON setting
+    // skip pre level timer
+    if (engine.readData(0x07A0) > 0) {
+      engine.writeData(0x07a0, 0);
+    }
+    // exit if dead
+    if (engine.readData(0x0e) == 0x0b) {
+      return;
+    }
+    // exit if falling below screen
+    if (engine.readData(0xb5) > 0x01) {
+      return;
+    }
+
     frame++;
   }
 }
