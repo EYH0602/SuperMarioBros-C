@@ -18,6 +18,8 @@ static SDL_Texture *scanlineTexture;
 static SMBEngine *smbEngine = nullptr;
 static uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
 
+static int level = 0;
+
 /**
  * Load the Super Mario Bros. ROM image.
  */
@@ -163,7 +165,24 @@ static void mainLoop() {
   bool running = true;
   int progStartTime = SDL_GetTicks();
   int frame = 0;
+
+  // level config from IJON
+  int sleep = 100;
+  int enter = 0;
+
+  uint64_t last_world_pos = 0xffffffff;
+  uint64_t idle = 0;
+  bool hammertime = false;
+
   while (running) {
+
+    if (sleep == 0) {
+      enter = 1;
+      engine.writeData(0x0760, level); // overwrite level
+    } else {
+      sleep--;
+    }
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
@@ -249,6 +268,58 @@ static void mainLoop() {
 }
 
 int main(int argc, char **argv) {
+  if (argc > 2) {
+    printf("usage: smbc level\n");
+    exit(0);
+  }
+
+  printf("got argc %d\n", argc);
+  assert(argc > 1);
+
+  level = atoi(argv[1]);
+  printf("run level %d\n", level);
+
+  if (level >= 36 || level < 0) {
+    printf("ERROR: invalid level...\n");
+    printf("===== Levels: =====\n");
+    printf("0:      Level 1-1\n");
+    printf("1:  Pre Level 1-2\n");
+    printf("2:      Level 1-2\n");
+    printf("3:      Level 1-3\n");
+    printf("4:      Level 1-4\n");
+    printf("5:      Level 2-1\n");
+    printf("6:  Pre Level 2-2\n");
+    printf("7:      Level 2-2\n");
+    printf("8:      Level 2-3\n");
+    printf("9:      Level 2-4\n");
+    printf("10:     Level 3-1\n");
+    printf("11:     Level 3-2\n");
+    printf("12:     Level 3-3\n");
+    printf("13:     Level 3-4\n");
+    printf("14:     Level 4-1\n");
+    printf("15: Pre Level 4-2\n");
+    printf("16:     Level 4-2\n");
+    printf("17:     Level 4-3\n");
+    printf("18:     Level 4-4\n");
+    printf("19:     Level 5-1\n");
+    printf("20:     Level 5-2\n");
+    printf("21:     Level 5-3\n");
+    printf("22:     Level 5-4\n");
+    printf("23:     Level 6-1\n");
+    printf("24:     Level 6-2\n");
+    printf("25:     Level 6-3\n");
+    printf("26:     Level 6-4\n");
+    printf("27:     Level 7-1\n");
+    printf("28: Pre Level 7-2\n");
+    printf("29:     Level 7-2\n");
+    printf("30:     Level 7-3\n");
+    printf("31:     Level 7-4\n");
+    printf("32:     Level 8-1\n");
+    printf("33:     Level 8-2\n");
+    printf("34:     Level 8-3\n");
+    printf("35:     Level 8-4\n");
+    exit(0);
+  }
   if (!initialize()) {
     std::cout << "Failed to initialize. Please check previous error messages "
                  "for more information. The program will now exit.\n";

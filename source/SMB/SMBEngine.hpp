@@ -62,7 +62,7 @@ public:
    */
   void update();
 
-private:
+  // private: // make everything public as IJON did
   // NES Emulation subsystems:
   APU *apu;
   PPU *ppu;
