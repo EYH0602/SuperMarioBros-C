@@ -2,9 +2,25 @@ cmake_minimum_required(VERSION 3.5)
 
 project(smbc)
 
+# Force the compiler to be clang
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
 add_subdirectory(codegen)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-c++11-narrowing")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-c++11-narrowing")
+
+# if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+#     add_compile_options(-fprofile-instr-generate -fcoverage-mapping)
+#     add_link_options(-fprofile-instr-generate)
+# endif()
+
+
+# Add coverage flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-c++11-narrowing -fprofile-instr-generate -fcoverage-mapping")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+
+
 
 set(SOURCE_FILES
     source/Configuration.cpp
@@ -27,3 +43,10 @@ add_executable(smbc ${SOURCE_FILES})
 target_link_libraries(smbc ${SDL2_LIBRARY} ${SDL2_LIBRARIES})
 
 add_dependencies(smbc codegen)
+
+add_custom_target(coverage
+    COMMAND llvm-profdata merge -sparse *.profraw -o default.profdata
+    COMMAND llvm-cov export ./smbc -instr-profile=default.profdata -format=text -summary-only > coverage.json
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating coverage report"
+)
