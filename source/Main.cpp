@@ -204,10 +204,14 @@ static void mainLoop() {
 
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     Controller &controller1 = engine.getController1();
+
+    // start game right away
+    controller1.setButtonState(BUTTON_START, enter);
+
     controller1.setButtonState(BUTTON_A, keys[SDL_SCANCODE_X]);
     controller1.setButtonState(BUTTON_B, keys[SDL_SCANCODE_Z]);
-    controller1.setButtonState(BUTTON_SELECT, keys[SDL_SCANCODE_BACKSPACE]);
-    controller1.setButtonState(BUTTON_START, keys[SDL_SCANCODE_RETURN]);
+    // controller1.setButtonState(BUTTON_SELECT, keys[SDL_SCANCODE_BACKSPACE]);
+    // controller1.setButtonState(BUTTON_START, keys[SDL_SCANCODE_RETURN]);
     controller1.setButtonState(BUTTON_UP, keys[SDL_SCANCODE_UP]);
     controller1.setButtonState(BUTTON_DOWN, keys[SDL_SCANCODE_DOWN]);
     controller1.setButtonState(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
