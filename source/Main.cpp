@@ -285,7 +285,7 @@ static void mainLoop() {
     if (engine.readData(0xb5) > 0x01) {
       return;
     }
-
+    assert(engine.readData(0x1d) != 0x03);
     frame++;
   }
 }
