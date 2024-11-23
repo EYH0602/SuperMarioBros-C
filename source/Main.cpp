@@ -273,6 +273,13 @@ static void mainLoop() {
     }
 
     // IJON setting
+
+    uint64_t screen = (uint64_t)engine.readData(0x6d);
+    uint64_t pos = (uint64_t)engine.readData(0x86);
+    uint64_t world_pos = screen * 255 + pos;
+
+    uint64_t pos_y = ((uint64_t)engine.readData(0x00CE)) *
+                     ((uint64_t)engine.readData(0x00B5));
     // skip pre level timer
     if (engine.readData(0x07A0) > 0) {
       engine.writeData(0x07a0, 0);
@@ -285,6 +292,21 @@ static void mainLoop() {
     if (engine.readData(0xb5) > 0x01) {
       return;
     }
+
+    // lazy bastard: exit if idle
+    if (world_pos > 44 && !hammertime) {
+      hammertime = true;
+    }
+    if (world_pos == last_world_pos) {
+      idle += 1;
+    } else {
+      idle = 0;
+      last_world_pos = world_pos;
+    }
+    if (hammertime && idle > 4) {
+      return;
+    }
+
     assert(engine.readData(0x1d) != 0x03);
     frame++;
   }
