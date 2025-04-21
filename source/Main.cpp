@@ -293,19 +293,6 @@ static void mainLoop() {
       return;
     }
 
-    // lazy bastard: exit if idle
-    if (world_pos > 44 && !hammertime) {
-      hammertime = true;
-    }
-    if (world_pos == last_world_pos) {
-      idle += 1;
-    } else {
-      idle = 0;
-      last_world_pos = world_pos;
-    }
-    if (hammertime && idle > 4) {
-      return;
-    }
 
     assert(engine.readData(0x1d) != 0x03);
     frame++;
